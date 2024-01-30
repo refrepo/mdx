@@ -160,6 +160,9 @@ await fs.writeFile(
 
 console.log('✔ `/rss.xml`')
 
+// 跑步起来,先就这样吧
+process.exit(0);
+
 const browser = await puppeteer.launch(
   process.env.AWS_EXECUTION_ENV
     ? {
@@ -169,7 +172,12 @@ const browser = await puppeteer.launch(
         executablePath: await chromium.executablePath(),
         headless: chromium.headless
       }
-    : {headless: 'new'}
+    : {
+        headless: 'new',
+        args: [...chromium.args, '--disable-gpu'],
+        defaultViewport: chromium.defaultViewport,
+        executablePath: '/opt/google/chrome/chrome',
+      }
 )
 
 await pAll(
